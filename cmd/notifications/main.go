@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/LogExE/web-microservice-app/config"
 	"github.com/LogExE/web-microservice-app/internal"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
@@ -16,7 +17,9 @@ type app struct {
 }
 
 func main() {
-	c, err := boxes.MakeConsumer("boxesNotifications")
+	cfg := config.New()
+
+	c, err := boxes.MakeConsumer(cfg, "boxesNotifications")
 	if err != nil {
 		log.Fatal("Failed to create consumer: ", err)
 	}

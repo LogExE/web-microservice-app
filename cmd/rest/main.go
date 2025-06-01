@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/LogExE/web-microservice-app/config"
 	"github.com/LogExE/web-microservice-app/internal"
 )
 
@@ -13,13 +14,13 @@ type app struct {
 }
 
 func main() {
-	router := gin.Default()
+	cfg := config.New()
 
 	db, err := boxes.InitDB()
 	if err != nil {
 		log.Fatal("Failed to init db: ", err)
 	}
-	p, err := boxes.MakeProducer("boxesMAIN")
+	p, err := boxes.MakeProducer(cfg, "boxesMAIN")
 	if err != nil {
 		log.Fatal("Failed to create producer: ", err)
 	}
@@ -30,8 +31,9 @@ func main() {
 
 	go outboxWorker(p, &a.boxRepo)
 
+	router := gin.Default()
 	a.registerRoutes(router)
-	router.Run("localhost:8080")
+	router.Run(cfg.REST.Addr)
 }
 
 func (a *app) registerRoutes(r *gin.Engine) {

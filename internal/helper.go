@@ -2,8 +2,10 @@ package boxes
 
 import (
 	"database/sql"
+
 	_ "modernc.org/sqlite"
 
+	"github.com/LogExE/web-microservice-app/config"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -32,9 +34,9 @@ func InitDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func MakeConsumer(group string) (*kafka.Consumer, error) {
+func MakeConsumer(c *config.Config, group string) (*kafka.Consumer, error) {
 	p, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092",
+		"bootstrap.servers": c.Broker.BootstrapAddr,
 		"group.id":          group,
 		"auto.offset.reset": "smallest",
 	})
@@ -45,9 +47,9 @@ func MakeConsumer(group string) (*kafka.Consumer, error) {
 	return p, nil
 }
 
-func MakeProducer(client string) (*kafka.Producer, error) {
+func MakeProducer(c *config.Config, client string) (*kafka.Producer, error) {
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092",
+		"bootstrap.servers": c.Broker.BootstrapAddr,
 		"client.id":         client,
 		"acks":              "all"})
 
