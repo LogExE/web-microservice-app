@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
     - name: rest
-      image: web-go:v1
+      image: &mega_img ghcr.io/logexe/web-microservice-app:master
       command: ["rest"]
       env:
         - name: GIN_MODE
@@ -14,11 +14,12 @@ spec:
           value: "0.0.0.0:8080"
       ports:
         - containerPort: 8080
+          hostPort: 8080
     - name: filter
-      image: web-go:v1
+      image: *mega_img
       command: ["filter"]
     - name: notifications
-      image: web-go:v1
+      image: *mega_img
       command: ["notifications"]
     - name: broker
       image: apache/kafka:3.9.1
