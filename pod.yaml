@@ -3,7 +3,26 @@ kind: Pod
 metadata:
   name: web-go
 spec:
+  volumes:
+  - name: conf
+    hostPath:
+      path: nginx
+      type: Directory
+  - name: static
+    hostPath:
+      path: frontend
+      type: Directory
   containers:
+    - name: proxy
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+          hostPort: 8080
+      volumeMounts:
+      - name: conf
+        mountPath: /etc/nginx/conf.d
+      - name: static
+        mountPath: /www
     - name: rest
       image: &mega_img web-go:latest
       command: ["rest"]
@@ -12,9 +31,6 @@ spec:
           value: "release"
         - name: REST_ADDR
           value: "0.0.0.0:8080"
-      ports:
-        - containerPort: 8080
-          hostPort: 8080
     - name: filter
       image: *mega_img
       command: ["filter"]

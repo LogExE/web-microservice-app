@@ -1,0 +1,32 @@
+
+body {
+    background-color: skyblue;
+    text-align: center;
+}
+
+body {
+    width: 50%;
+    margin: auto;
+}
+
+li {
+    background-color: gray;
+    text-align: left;
+    width: 24em;
+    padding: 1em;
+    margin-bottom: 10px;
+}
+
+form input {
+    display: block;
+}
+
+form textarea {
+    display: block;
+}
+
+
+form label {
+    display: block;
+    text-align: left;
+}
