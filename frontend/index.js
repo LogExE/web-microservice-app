@@ -26,13 +26,14 @@ async function postLike(id) {
 }
 
 async function fillNotes() {
-	const resp = await fetch("boxes");
-	const result = await resp.json();
-	console.log("recieved object:", result);
-
-	nlist.innerHTML = result
-		.map(note => `<li><p><blockquote>${note.content}</blockquote></p><p>Author: ${note.author}</p><p>Likes: ${note.likes} <button onclick="postLike(${note.id})">Like!</button></p></li>`)
-		.join("");
+    const resp = await fetch("boxes");
+    const result = await resp.json();
+    console.log("recieved object:", result);
+    
+    // TODO: fix XSS
+    nlist.innerHTML = result
+	.map(note => `<li><p><blockquote>${note.content}</blockquote></p><p>Author: ${note.author}</p><p>Likes: ${note.likes} <button onclick="postLike(${note.id})">Like!</button></p></li>`)
+	.join("");
 }
 
 // TODO: poll in intervals
