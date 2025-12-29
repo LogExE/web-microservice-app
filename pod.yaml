@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
     - name: rest
-      image: &mega_img ghcr.io/logexe/web-microservice-app:master
+      image: &mega_img web-go:latest
       command: ["rest"]
       env:
         - name: GIN_MODE

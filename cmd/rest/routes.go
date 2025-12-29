@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -13,10 +14,17 @@ import (
 )
 
 func (a *app) boxesGet(c *gin.Context) {
+	sortBy := c.Query("sortBy")
+	
 	boxes, err := a.boxRepo.BoxesList()
 	if err != nil {
 		log.Println("boxesGet ISE: ", err)
-		c.JSON(http.StatusInternalServerError, "ISE")
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "ISE"})
+	}
+	if sortBy == "likes" {
+		sort.Slice(boxes, func(i, j int) bool {
+			return boxes[i].Likes > boxes[j].Likes
+		})
 	}
 	c.JSON(http.StatusOK, boxes)
 }
@@ -38,16 +46,6 @@ func (a *app) boxPost(c *gin.Context) {
 	c.JSON(http.StatusCreated, newBox)
 }
 
-func intParamOrBadRequest(param string, c *gin.Context) (int, bool) {
-	p := c.Param(param)
-	conv, err := strconv.Atoi(p)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"mesage": "bad id"})
-		return 0, false
-	}
-	return conv, true
-}
-
 func (a *app) boxGet(c *gin.Context) {
 	id, succ := intParamOrBadRequest("id", c)
 	if !succ {
@@ -61,7 +59,7 @@ func (a *app) boxGet(c *gin.Context) {
 			return
 		}
 		log.Println("boxGet ISE: ", err)
-		c.JSON(http.StatusInternalServerError, "ISE")
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "ISE"})
 		return
 	}
 
@@ -77,8 +75,18 @@ func (a *app) boxLike(c *gin.Context) {
 	err := a.boxRepo.BoxLikeUpdate(int64(id))
 	if err != nil {
 		log.Println("boxLike ISE: ", err)
-		c.JSON(http.StatusInternalServerError, "ISE")
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "ISE"})
 		return
 	}
-	c.JSON(http.StatusOK, "OK")
+	c.JSON(http.StatusOK, gin.H{"message": "OK"})
+}
+
+func intParamOrBadRequest(param string, c *gin.Context) (int, bool) {
+	p := c.Param(param)
+	conv, err := strconv.Atoi(p)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"mesage": "bad int param: " + param})
+		return 0, false
+	}
+	return conv, true
 }
