@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: web-go
 spec:
-  # don't forget to relabel this sheisse (chcon -t container_file_t -R frontend/ nginx/)
+  # don't forget to relabel mounts on host (chcon -t container_file_t -R frontend/ nginx/)
   volumes:
   - name: conf
     hostPath:
