@@ -33,7 +33,7 @@ async function fillNotes() {
     
     // TODO: fix XSS
     notesListEl.innerHTML = result
-	.map(note => `<li><blockquote><p>&#xAB;${note.content}&#xBB;</p></blockquote><p>Author: ${note.author}</p><p>Likes: ${note.likes} <button onclick="postLike(${note.id})">Like!</button></p></li>`)
+	.map(note => `<li><blockquote><p>&#xAB;${note.content}&#xBB;</p></blockquote><p><b>Author</b>: ${note.author}</p><p><b>Likes</b>: ${note.likes}<br/><button onclick="postLike(${note.id})">Like!</button></p></li>`)
 	.join("");
 }
 
