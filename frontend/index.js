@@ -1,5 +1,6 @@
 
 const nlist = document.getElementById("notesList")
+const notesSortSelector = document.getElementById("sortTypeSelector");
 
 async function postLike(id) {
 	try {
@@ -26,7 +27,7 @@ async function postLike(id) {
 }
 
 async function fillNotes() {
-    const resp = await fetch("boxes");
+    const resp = await fetch("boxes?sortBy=" + notesSortSelector.value);
     const result = await resp.json();
     console.log("recieved object:", result);
     
@@ -40,3 +41,5 @@ async function fillNotes() {
 fillNotes()
 	.then(() => console.log("loaded notes, hooray! 💫"))
 	.catch(err => console.log("caught error: " + err));
+
+notesSortSelector.onchange = fillNotes;
