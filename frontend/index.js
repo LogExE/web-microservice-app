@@ -1,6 +1,6 @@
 
-const nlist = document.getElementById("notesList")
-const notesSortSelector = document.getElementById("sortTypeSelector");
+const notesListEl = document.getElementById("notesList")
+const notesSortSelectorEl = document.getElementById("sortTypeSelector");
 
 async function postLike(id) {
 	try {
@@ -27,13 +27,13 @@ async function postLike(id) {
 }
 
 async function fillNotes() {
-    const resp = await fetch("boxes?sortBy=" + notesSortSelector.value);
+    const resp = await fetch("boxes?sortBy=" + notesSortSelectorEl.value);
     const result = await resp.json();
     console.log("recieved object:", result);
     
     // TODO: fix XSS
-    nlist.innerHTML = result
-	.map(note => `<li><p><blockquote>${note.content}</blockquote></p><p>Author: ${note.author}</p><p>Likes: ${note.likes} <button onclick="postLike(${note.id})">Like!</button></p></li>`)
+    notesListEl.innerHTML = result
+	.map(note => `<li><blockquote><p>&#xAB;${note.content}&#xBB;</p></blockquote><p>Author: ${note.author}</p><p>Likes: ${note.likes} <button onclick="postLike(${note.id})">Like!</button></p></li>`)
 	.join("");
 }
 
@@ -42,4 +42,4 @@ fillNotes()
 	.then(() => console.log("loaded notes, hooray! 💫"))
 	.catch(err => console.log("caught error: " + err));
 
-notesSortSelector.onchange = fillNotes;
+notesSortSelectorEl.onchange = fillNotes;

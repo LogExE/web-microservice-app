@@ -1,6 +1,6 @@
 
 body {
-    background-color: skyblue;
+    background-color: floralwhite;
     text-align: center;
 }
 
@@ -10,11 +10,18 @@ body {
 }
 
 li {
-    background-color: gray;
+    background-color: antiquewhite;
     text-align: left;
     width: 24em;
+    border-radius: 10px;
     padding: 1em;
     margin-bottom: 10px;
+}
+
+blockquote > p {
+    border-radius: 4px;
+    padding: 2em;
+    background-color: #dccdb9;
 }
 
 form input {
